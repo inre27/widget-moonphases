@@ -6,52 +6,52 @@
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background: #0e0e2c;
+      background: #1e1e2e;
       color: white;
       text-align: center;
       padding: 2em;
     }
-    .phase-img {
+    img {
       width: 120px;
       margin-top: 1em;
     }
   </style>
 </head>
 <body>
-  <h1>🌙 Moon Phase Tracker</h1>
-  <div id="moonPhaseDisplay"></div>
+  <h1>🌕 Moon Phase Tracker</h1>
+  <div id="moonDisplay">Loading...</div>
 
   <script>
-    const phases = [
-      "New Moon",
-      "Waxing Crescent",
-      "First Quarter",
-      "Waxing Gibbous",
-      "Full Moon",
-      "Waning Gibbous",
-      "Last Quarter",
-      "Waning Crescent"
-    ];
+    const API_KEY = "YOUR_API_KEY_HERE"; // Replace this
+    const LOCATION = "London"; // You can also use "New York", "Tokyo", etc.
 
-    const getMoonPhase = () => {
-      // Reference new moon — May 1, 2025
-      const knownNewMoon = new Date("2025-05-01T00:00:00Z");
-      const now = new Date();
-      const lunarCycle = 29.53058867; // average length in days
-      const diff = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
-      const phase = Math.floor((diff % lunarCycle) / (lunarCycle / 8));
-      return phase;
+    const phaseToIndex = {
+      "New Moon": 0,
+      "Waxing Crescent": 1,
+      "First Quarter": 2,
+      "Waxing Gibbous": 3,
+      "Full Moon": 4,
+      "Waning Gibbous": 5,
+      "Last Quarter": 6,
+      "Waning Crescent": 7
     };
 
-    const phaseIndex = getMoonPhase();
-    const phaseName = phases[phaseIndex];
-    const imgSrc = `moon-${phaseIndex}.png`;
+    fetch(`https://api.weatherapi.com/v1/astronomy.json?key=${API_KEY}&q=${LOCATION}&dt=${new Date().toISOString().split('T')[0]}`)
+      .then(res => res.json())
+      .then(data => {
+        const phase = data.astronomy.astro.moon_phase;
+        const index = phaseToIndex[phase] ?? 0;
+        const imgSrc = `moon-${index}.png`; // Adjust path if images are in a subfolder
 
-    
-    document.getElementById("moonPhaseDisplay").innerHTML = `
-      <h2>${phaseName}</h2>
-      <img class="phase-img" src="${imgSrc}" alt="${phaseName}">
-    `;
+        document.getElementById("moonDisplay").innerHTML = `
+          <h2>${phase}</h2>
+          <img src="${imgSrc}" alt="${phase}">
+        `;
+      })
+      .catch(err => {
+        document.getElementById("moonDisplay").innerText = "Moon data failed to load.";
+        console.error("Error fetching moon phase:", err);
+      });
   </script>
 </body>
 </html>
