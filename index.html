@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lunar Phase Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      color: #f0e7d5;
+      text-align: center;
+      padding: 30px;
+    }
+    .container {
+      max-width: 300px;
+      margin: auto;
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+    #moonImage {
+      width: 100px;
+      height: 100px;
+      margin-top: 15px;
+      image-rendering: crisp-edges;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌙 Lunar Phase Tracker</h2>
+    <p id="phaseText">Loading...</p>
+    <img id="moonImage" src="" alt="Moon Phase Image"/>
+  </div>
+
+  <script>
+    const moonPhases = [
+      "New Moon",
+      "Waxing Crescent",
+      "First Quarter",
+      "Waxing Gibbous",
+      "Full Moon",
+      "Waning Gibbous",
+      "Last Quarter",
+      "Waning Crescent"
+    ];
+
+    function getMoonPhaseIndex() {
+      const lunarCycle = 29.53058867;
+      const knownNewMoon = new Date("2023-12-26"); // Reference new moon
+      const now = new Date();
+      const diff = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
+      const phase = (diff % lunarCycle) / lunarCycle;
+      return Math.floor(phase * 8) % 8;
+    }
+
+    function updateMoon() {
+      const index = getMoonPhaseIndex();
+      document.getElementById("phaseText").textContent = moonPhases[index];
+      document.getElementById("moonImage").src = `moon-${index}.png`;
+      document.getElementById("moonImage").alt = moonPhases[index];
+    }
+
+    updateMoon();
+  </script>
+</body>
+</html>
