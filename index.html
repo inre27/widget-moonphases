@@ -1,42 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lunar Phase Tracker</title>
+  <meta charset="UTF-8">
+  <title>Moon Phase Tracker</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #1a1a1a;
-      color: #f0e7d5;
+      font-family: 'Arial', sans-serif;
+      background: #0e0e2c;
+      color: white;
       text-align: center;
-      padding: 30px;
+      padding: 2em;
     }
-    .container {
-      max-width: 300px;
-      margin: auto;
-      background: #2a2a2a;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-    }
-    #moonImage {
-      width: 100px;
-      height: 100px;
-      margin-top: 15px;
-      image-rendering: crisp-edges;
+    .phase-img {
+      width: 120px;
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🌙 Lunar Phase Tracker</h2>
-    <p id="phaseText">Loading...</p>
-    <img id="moonImage" src="" alt="Moon Phase Image"/>
-  </div>
+  <h1>🌙 Moon Phase Tracker</h1>
+  <div id="moonPhaseDisplay"></div>
 
   <script>
-    const moonPhases = [
+    const phases = [
       "New Moon",
       "Waxing Crescent",
       "First Quarter",
@@ -47,24 +33,24 @@
       "Waning Crescent"
     ];
 
-    function getMoonPhaseIndex() {
-      const lunarCycle = 29.53058867;
-      // Last updated: May 7, 2025 — New Moon at 03:22 UTC
-      const knownNewMoon = new Date("2025-05-07T03:22:00Z"); // Reference new moon
+    const getMoonPhase = () => {
+      // Reference new moon — May 1, 2025
+      const knownNewMoon = new Date("2025-05-01T00:00:00Z");
       const now = new Date();
+      const lunarCycle = 29.53058867; // average length in days
       const diff = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
-      const phase = (diff % lunarCycle) / lunarCycle;
-      return Math.floor(phase * 8) % 8;
-    }
+      const phase = Math.floor((diff % lunarCycle) / (lunarCycle / 8));
+      return phase;
+    };
 
-    function updateMoon() {
-      const index = getMoonPhaseIndex();
-      document.getElementById("phaseText").textContent = moonPhases[index];
-      document.getElementById("moonImage").src = `moon-${index}.png`;
-      document.getElementById("moonImage").alt = moonPhases[index];
-    }
+    const phaseIndex = getMoonPhase();
+    const phaseName = phases[phaseIndex];
+    const imgSrc = `https://your-image-host.com/moon-${phaseIndex}.png`; // update with your image URLs
 
-    updateMoon();
+    document.getElementById("moonPhaseDisplay").innerHTML = `
+      <h2>${phaseName}</h2>
+      <img class="phase-img" src="${imgSrc}" alt="${phaseName}">
+    `;
   </script>
 </body>
 </html>
