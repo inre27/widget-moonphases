@@ -45,8 +45,9 @@
 
     const phaseIndex = getMoonPhase();
     const phaseName = phases[phaseIndex];
-    const imgSrc = `https://your-image-host.com/moon-${phaseIndex}.png`; // update with your image URLs
+    const imgSrc = `moon-${phaseIndex}.png`;
 
+    
     document.getElementById("moonPhaseDisplay").innerHTML = `
       <h2>${phaseName}</h2>
       <img class="phase-img" src="${imgSrc}" alt="${phaseName}">
