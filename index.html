@@ -49,7 +49,8 @@
 
     function getMoonPhaseIndex() {
       const lunarCycle = 29.53058867;
-      const knownNewMoon = new Date("2023-12-26"); // Reference new moon
+      // Last updated: May 7, 2025 — New Moon at 03:22 UTC
+      const knownNewMoon = new Date("2025-05-07T03:22:00Z"); // Reference new moon
       const now = new Date();
       const diff = (now - knownNewMoon) / (1000 * 60 * 60 * 24);
       const phase = (diff % lunarCycle) / lunarCycle;
